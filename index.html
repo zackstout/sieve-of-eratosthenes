@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sieve</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+
+</head>
+
+<body>
+    <script>
+        const w = 600;
+        const h = 600;
+        const s = 20;
+        cells = [];
+        let grid;
+
+        function setup() {
+            createCanvas(w, h);
+            background(200);
+
+            grid = new Grid();
+            console.log(grid.cells);
+            cells = grid.cells;
+            grid.show();
+
+            const vals = sieve(s * s);
+            let i = 0;
+
+            setInterval(() => {
+                const c = getCell(vals[i])[0];
+                
+                if (vals[i] % 37 === 0) {
+                    c.fill = 'gold';
+                }
+                if (vals[i] % 31 === 0) {
+                    c.fill = 'gray';
+                }
+                if (vals[i] % 29 === 0) {
+                    c.fill = 'steelblue';
+                }
+                if (vals[i] % 23 === 0) {
+                    c.fill = 'periwinkle';
+                }
+                if (vals[i] % 17 === 0) {
+                    c.fill = 'coral';
+                }
+                if (vals[i] % 13 === 0) {
+                    c.fill = 'pink';
+                }
+                if (vals[i] % 11 === 0) {
+                    c.fill = 'red';
+                }
+                if (vals[i] % 7 === 0) {
+                    c.fill = 'orange';
+                }
+                if (vals[i] % 5 === 0) {
+                    c.fill = 'purple';
+                }
+                if (vals[i] % 3 === 0) {
+                    c.fill = 'green';
+                }
+                if (vals[i] % 2 === 0) {
+                    c.fill = 'blue';
+                }
+                // console.log(vals[i]);
+                i++;
+            }, 100);
+        }
+
+        function draw() {
+            background(200);
+            grid.show();
+        }
+
+        function sieve(x) {
+            console.log(x, Math.pow(x, 0.5));
+            const result = [];
+            for (let i = 2; i < Math.pow(x, 0.5); i++) {
+                for (let j = 1; j < x / i; j++) {
+                    if (result.indexOf(i * j) < 0) result.push(i * j);
+                }
+            }
+            return result;
+        }
+
+        function getCell(n) {
+            return cells.filter(c => c.x + s * c.y === n);
+        }
+
+
+
+
+        class Grid {
+            constructor() {
+                this.cells = [];
+                for (let i = 0; i < s; i++) {
+                    for (let j = 0; j < s; j++) {
+                        this.cells.push({
+                            x: i,
+                            y: j,
+                            fill: 'white'
+                        });
+                    }
+                }
+            }
+
+            show() {
+                cells.forEach(c => {
+                    fill(c.fill);
+                    rect(c.x * w / s, c.y * h / s, w / s * 0.99, h / s * 0.99);
+                    fill('black');
+                    // stroke('black');
+                    textSize(200/s);
+                    text(c.y * s + c.x,
+                        c.x * w / s,
+                        (c.y + 1) * h / s);
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
