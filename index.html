@@ -7,92 +7,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sieve</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+    <style>
+        .cell {
+            border: 1px solid black;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
+        #container {
+  
+            position: relative;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="container"></div>
     <script>
         const w = 600;
         const h = 600;
-        const s = 20;
-        cells = [];
-        let grid;
+        const s = 30;
 
-        function setup() {
-            createCanvas(w, h);
-            background(200);
-
-            grid = new Grid();
-            console.log(grid.cells);
-            cells = grid.cells;
-            grid.show();
-
-            const vals = sieve(s * s);
-            let i = 0;
-
-            setInterval(() => {
-                const c = getCell(vals[i])[0];
-                
-                if (vals[i] % 37 === 0) {
-                    c.fill = 'gold';
-                }
-                if (vals[i] % 31 === 0) {
-                    c.fill = 'gray';
-                }
-                if (vals[i] % 29 === 0) {
-                    c.fill = 'steelblue';
-                }
-                if (vals[i] % 23 === 0) {
-                    c.fill = 'periwinkle';
-                }
-                if (vals[i] % 17 === 0) {
-                    c.fill = 'coral';
-                }
-                if (vals[i] % 13 === 0) {
-                    c.fill = 'pink';
-                }
-                if (vals[i] % 11 === 0) {
-                    c.fill = 'red';
-                }
-                if (vals[i] % 7 === 0) {
-                    c.fill = 'orange';
-                }
-                if (vals[i] % 5 === 0) {
-                    c.fill = 'purple';
-                }
-                if (vals[i] % 3 === 0) {
-                    c.fill = 'green';
-                }
-                if (vals[i] % 2 === 0) {
-                    c.fill = 'blue';
-                }
-                // console.log(vals[i]);
-                i++;
-            }, 100);
-        }
-
-        function draw() {
-            background(200);
-            grid.show();
-        }
-
-        function sieve(x) {
-            console.log(x, Math.pow(x, 0.5));
-            const result = [];
-            for (let i = 2; i < Math.pow(x, 0.5); i++) {
-                for (let j = 1; j < x / i; j++) {
-                    if (result.indexOf(i * j) < 0) result.push(i * j);
-                }
-            }
-            return result;
-        }
-
-        function getCell(n) {
-            return cells.filter(c => c.x + s * c.y === n);
-        }
-
-
-
+        document.getElementById("container").style.height = `${h}px`;
+        document.getElementById("container").style.width = `${w}px`;
 
         class Grid {
             constructor() {
@@ -107,20 +46,83 @@
                     }
                 }
             }
-
-            show() {
-                cells.forEach(c => {
-                    fill(c.fill);
-                    rect(c.x * w / s, c.y * h / s, w / s * 0.99, h / s * 0.99);
-                    fill('black');
-                    // stroke('black');
-                    textSize(200/s);
-                    text(c.y * s + c.x,
-                        c.x * w / s,
-                        (c.y + 1) * h / s);
-                });
-            }
         }
+
+        cells = [];
+        const grid = new Grid();
+        console.log(grid.cells);
+
+        grid.cells.forEach((cell, i) => {
+            const div = document.createElement("div");
+            div.classList.add("cell");
+            div.id = cell.x * s + cell.y;
+            div.innerText = i;
+            div.style.top = `${cell.y * h / s}px`;
+            div.style.left = `${cell.x * w / s}px`;
+            document.getElementById("container").appendChild(div);
+        });
+
+        document.querySelectorAll(".cell").forEach(cell => {
+            // console.log(cell);
+            cell.style.height = `${h/s}px`;
+            cell.style.width = `${w/s}px`;
+
+        });
+
+        const vals = sieve(s * s);
+        let i = 0;
+
+        setInterval(() => {
+            const c = document.getElementById(vals[i]);
+
+            if (vals[i] % 37 === 0) {
+                c.style.backgroundColor = 'gold';
+            }
+            if (vals[i] % 31 === 0) {
+                c.style.backgroundColor = 'gray';
+            }
+            if (vals[i] % 29 === 0) {
+                c.style.backgroundColor = 'steelblue';
+            }
+            if (vals[i] % 23 === 0) {
+                c.style.backgroundColor = 'periwinkle';
+            }
+            if (vals[i] % 17 === 0) {
+                c.style.backgroundColor = 'coral';
+            }
+            if (vals[i] % 13 === 0) {
+                c.style.backgroundColor = 'pink';
+            }
+            if (vals[i] % 11 === 0) {
+                c.style.backgroundColor = 'red';
+            }
+            if (vals[i] % 7 === 0) {
+                c.style.backgroundColor = 'orange';
+            }
+            if (vals[i] % 5 === 0) {
+                c.style.backgroundColor = 'purple';
+            }
+            if (vals[i] % 3 === 0) {
+                c.style.backgroundColor = 'green';
+            }
+            if (vals[i] % 2 === 0) {
+                c.style.backgroundColor = 'blue';
+            }
+
+            i++;
+        }, 30);
+
+        function sieve(x) {
+            console.log(x, Math.pow(x, 0.5));
+            const result = [];
+            for (let i = 2; i < Math.pow(x, 0.5); i++) {
+                for (let j = 1; j < x / i; j++) {
+                    if (result.indexOf(i * j) < 0) result.push(i * j);
+                }
+            }
+            return result;
+        }
+
     </script>
 </body>
 
